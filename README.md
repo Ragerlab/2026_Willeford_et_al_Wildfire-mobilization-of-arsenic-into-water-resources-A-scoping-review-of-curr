@@ -1,4 +1,5 @@
-# Wildfire Mobilization of Arsenic into Water Resources A Systematic Literature Review
+# Wildfire mobilization of arsenic into water resources: A scoping review of current literature
+
 ADD WORDS
 
 ## Figure 3
