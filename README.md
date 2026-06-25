@@ -7,7 +7,7 @@ These analyses were used to answer the following questions:
 2. What mobilization pathways are most common for As when impacted by wildfires?
 3. How are surface and groundwater As concentrations impacted by wildfire mobilization of As?
 
-All analyses in this respository are designated by their figure number or table number in the manuscript in parantheses. In the instance that the files are unable to rendered, they can be rendered at the [NBViewer link](https://nbviewer.org/github/Ragerlab/2026_Willeford_et_al_Wildfire-mobilization-of-arsenic-into-water-resources-A-scoping-review-of-curr/tree/main/).
+All analyses in this respository are designated by their figure number or table number in the manuscript. In the instance that the files are unable to rendered, they can be rendered at the [NBViewer link](https://nbviewer.org/github/Ragerlab/2026_Willeford_et_al_Wildfire-mobilization-of-arsenic-into-water-resources-A-scoping-review-of-curr/tree/main/).
 
 ## Figure 3 & Table S3
 - Heatmap indicating which media and mobilization pathways were impacted after wildfire for various study locations
