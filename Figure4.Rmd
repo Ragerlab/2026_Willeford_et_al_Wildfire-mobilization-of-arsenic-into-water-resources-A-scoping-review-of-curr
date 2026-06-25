@@ -1,0 +1,198 @@
+---
+title: "As_Mobilization_fig_4"
+author: "Kai Malone"
+date: "2026-06-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load Packages, import
+```{r}
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+library(readxl)
+library(ggbreak)
+library(scales)
+input <- read_excel("Extraction Table_202606_KM.xlsx") 
+
+```
+
+Transpose to long format
+```{r}
+df <- input %>% 
+  clean_names()
+
+# Calculate percent change and order studies
+df <- df %>%
+  mutate(
+    pct_change = ((post_fire - pre_fire) / pre_fire) * 100,
+    `Impacted Water Media (Citation)` =
+      paste0(impacted_water_media, "\n", citation)
+  )
+
+# Convert to long format
+df_long <- df %>%
+  pivot_longer(
+    cols = c(pre_fire, post_fire),
+    names_to = "Time_Point",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Time_Point = factor(
+      Time_Point,
+      levels = c("pre_fire", "post_fire"),
+      labels = c("Pre-fire", "Post-fire")
+    ),
+    lod_flag = factor(
+  case_when(
+    Value < 0.20 ~ "<LOD",
+    Value == 1 ~ "<LOD",
+    TRUE ~ "Detected"
+  ),
+  levels = c("Detected", "<LOD", "Special (1)")
+)
+  )
+```
+
+Plot
+```{r}
+# Set drinking water limit
+dw_limit <- 10
+
+# Add percent changes into new dataframe
+df_labels <- df %>%
+  filter(is.finite(pct_change))
+
+# Add footnote labels to necessary studies
+df <- df %>%
+  mutate(
+    footnote = case_when(
+      `Impacted Water Media (Citation)` == "Surface Water\n(Rust et al., 2018)" ~ "*",
+      `Impacted Water Media (Citation)` == "Groundwater\n(Pennino et al., 2022)" ~ "*‡",
+      `Impacted Water Media (Citation)` == "Surface Water\n(Magliozzi et al., 2024)" ~ "†",
+      `Impacted Water Media (Citation)` == "Groundwater (Pennino et al., 2022)" ~ "‡",
+      TRUE ~ ""
+    ),
+    media_label = paste0(`Impacted Water Media (Citation)`, footnote)
+  )
+
+df <- df %>%
+  mutate(
+    `Impacted Water Media (Citation)` =
+      as.character(`Impacted Water Media (Citation)`)
+  )
+
+df_long <- df_long %>%
+  mutate(
+    `Impacted Water Media (Citation)` =
+      as.character(`Impacted Water Media (Citation)`)
+  )
+
+# Create lookup table for labels
+label_lookup <- df %>%
+  distinct(
+    `Impacted Water Media (Citation)`,
+    media_label
+  ) %>%
+  tibble::deframe()
+
+# Generate dumbbell plot
+ggplot() +
+  geom_vline(
+    xintercept = dw_limit,
+    linetype = "dashed",
+    color = "black",
+    linewidth = 0.8
+  ) +
+  geom_text(
+  aes(
+    x = dw_limit,
+    y = Inf,
+    label = "U.S. Drinking Water Limit"
+  ),
+  fontface = "bold",
+  angle = -90,
+  vjust = -0.5,
+  hjust = -2.02,
+  size = 4.2
+) +
+ geom_text(
+    data = df_labels,
+    aes(
+      x = post_fire,
+      y = `Impacted Water Media (Citation)`,
+        label = paste0("+", sprintf("%.0f", pct_change), "%")
+    ),
+    hjust = -0.25,
+    size = 4
+  ) +
+  geom_segment(
+    data = df,
+    aes(
+      y = `Impacted Water Media (Citation)`,
+      yend = `Impacted Water Media (Citation)`,
+      x = pre_fire,
+      xend = post_fire
+    ),
+    color = "grey70",
+    linewidth = 0.8
+  ) +
+  geom_point(
+    data = df_long,
+    aes(
+      x = Value,
+      y = `Impacted Water Media (Citation)`,
+      color = Time_Point,
+      shape = lod_flag
+    ),
+    size = 4
+  ) +
+  scale_color_manual(
+    values = c(
+      "Pre-fire" = "#73bbc6",
+      "Post-fire" = "#d95f02"
+    )
+  ) +
+  scale_shape_manual(
+    values = c(
+      "<LOD" = 4,
+      "Detected" = 16
+    )
+  ) +
+  scale_x_continuous(
+    limits = c(0, 80)
+  ) +
+  scale_y_discrete(
+  labels = label_lookup
+) +
+  labs(
+  x = "Arsenic Concentration (ug/L)",
+  y = "Impacted Water Media",
+  color = "Time Point",
+  shape = "Detected?",
+  caption = paste("* Study reported mean As concentration instead of maximum",
+            "\n\u2020 Unburned reference values were below limit of detection (1ug/L); see Magliozzi et al. (2024) Table S3", "\n\u2021 As concentrations were measured in finished drinking water")
+) +
+  theme_bw() +
+  theme(
+    legend.title = element_text(face = "bold", size = 14),
+    legend.text = element_text(size = 14),
+    axis.text.y = element_text(size = 13),
+    axis.title.x = element_text(size = 15.5, face = "bold"),
+    axis.title.y = element_text(size = 15.5, face = "bold"),
+    panel.grid.major.y = element_blank(),
+    legend.position = "right",
+    plot.caption = element_text(
+      hjust = 0
+    )
+  ) +
+  scale_x_break(c(25, 65))
+```
+
+
+
+
