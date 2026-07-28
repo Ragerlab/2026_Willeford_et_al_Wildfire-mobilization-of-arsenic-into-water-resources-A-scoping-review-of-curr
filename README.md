@@ -9,8 +9,8 @@ These analyses were used to answer the following questions:
 
 All analyses in this respository are designated by their figure number or table number in the manuscript. In the instance that the files are unable to rendered, they can be rendered at the [NBViewer link](https://nbviewer.org/github/Ragerlab/2026_Willeford_et_al_Wildfire-mobilization-of-arsenic-into-water-resources-A-scoping-review-of-curr/tree/main/).
 
-## Figure 3 & Table S3
+# Figure 3 & Table S3
 - Heatmap indicating which media and mobilization pathways were impacted after wildfire for various study locations
 
-## Figure 4 & Table S4
+# Figure 4 & Table S4
 - A dumbbell plot showing percent change in arsenic concentrations after widlfire exposure in various water media
