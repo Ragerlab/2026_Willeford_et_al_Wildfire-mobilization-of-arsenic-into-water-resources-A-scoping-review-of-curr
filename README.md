@@ -2,7 +2,7 @@
 
 This code was generated to support the manuscript titled 'Wildfire mobilization of arsenic into water resources: A scoping review of current literature', published in PLOS Water in 2026. 
 
-> Willeford J, Moorhead L, Malone K, Payton A, Lee JS, Rager JE, LeDuc SD. Wildfire mobilization of arsenic into water resources: A scoping review of current literature. PLOS Water 5(8): e0000549. 2026 Aug 19; doi: doi: https://doi.org/10.1371/journal.pwat.0000549
+> Willeford J, Moorhead L, Malone K, Payton A, Lee JS, Rager JE, LeDuc SD. Wildfire mobilization of arsenic into water resources: A scoping review of current literature. PLOS Water 5(8): e0000549. 2026 Aug 19; doi: https://doi.org/10.1371/journal.pwat.0000549
 
 These analyses were used to answer the following questions: 
 1. Does fuel type influence how As is mobilized by wildfire?
